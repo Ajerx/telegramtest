@@ -65,10 +65,10 @@ def get_data(message):
     mask = message.text.split('/')[1]
     if int(mask) in range(0,33):
         bot.send_message(message.chat.id, 'Адрес сети: {}\nШироковещательный адрес: {}\nHostmin: {}\nHostmax: {}'.format(*calculation(network, mask)))
-        #bot.register_next_step_handler(message, get_data)
+        bot.register_next_step_handler(message, get_data)
     else:
         msg = bot.send_message(message.chat.id, 'Введена некорректная маска. Попробуйте еще раз')
-        #bot.register_next_step_handler(msg, get_data)
+        bot.register_next_step_handler(msg, get_data)
 
 
 if __name__ == '__main__':
