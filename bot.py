@@ -42,45 +42,45 @@ def calculation(network, mask):
 @bot.message_handler(commands=["ip"])
 def send_welcome(message):
     msg = bot.send_message(message.chat.id,
-    'Р’Р°Рј РЅРµРѕР±С…РѕРґРёРјРѕ Р·РЅР°С‚СЊ IP-Р°РґСЂРµСЃ Рё РјР°СЃРєСѓ СЃРµС‚Рё. '
-    'Р’РІРµРґРёС‚Рµ IP-Р°РґСЂРµСЃ Рё РјР°СЃРєСѓ СЃРµС‚Рё РІ С„РѕСЂРјР°С‚Рµ 123.123.123.123/15'
+    'Вам необходимо знать IP-адрес и маску сети. '
+    'Введите IP-адрес и маску сети в формате 123.123.123.123/15'
     )
     bot.register_next_step_handler(msg, get_data)
 
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
-    msg = bot.send_message(message.chat.id, 'РџСЂРёРІРµС‚. '
-    'Р­С‚Рѕ Р±РѕС‚, РєРѕС‚РѕСЂС‹Р№ РїРѕРјРѕРіР°РµС‚ РЅР°С…РѕРґРёС‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЃРµС‚Рё. '
+    msg = bot.send_message(message.chat.id, 'Привет. '
+    'Это бот, который помогает находить параметры сети. '
     )
 
 @bot.message_handler(commands=["help"])
 def send_welcome(message):
-    msg = bot.send_message(message.chat.id, 'РњРѕРё РєРѕРјР°РЅРґС‹:\n'
-    '/start - РџСЂРёРІРµС‚СЃС‚РІРµРЅРЅРѕРµ СЃРѕРѕР±С‰РµРЅРёРµ\n'
-    '/ip - РЈР·РЅР°С‚СЊ РїР°СЂР°РјРµС‚СЂС‹ СЃРµС‚Рё\n'
-    '/help - РЎРїРёСЃРѕРє РєРѕРјР°РЅРґ'
+    msg = bot.send_message(message.chat.id, 'Мои команды:\n'
+    '/start - Приветственное сообщение\n'
+    '/ip - Узнать параметры сети\n'
+    '/help - Список команд'
     )
 
 
 
 def get_data(message):
-    if message.text == ('/help' or '/start' or '/ip'):
+    if message.text in ('/help','/start','/ip'):
         return
     else:
         pattern = re.compile(
             "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\/.+$")
         if pattern.match(message.text) is None:
             msg = bot.send_message(message.chat.id,
-                                   'Р’С‹ РІРІРµР»Рё РЅРµРІРµСЂРЅС‹Р№ IP Р°РґСЂРµСЃ. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·')
+                                   'Вы ввели неверный IP адрес. Попробуйте еще раз')
             bot.register_next_step_handler(msg, get_data)
         else:
             network = message.text.split('/')[0]
             mask = message.text.split('/')[1]
             if int(mask) in range(0,33):
-                bot.send_message(message.chat.id, 'РђРґСЂРµСЃ СЃРµС‚Рё: {}\nРЁРёСЂРѕРєРѕРІРµС‰Р°С‚РµР»СЊРЅС‹Р№ Р°РґСЂРµСЃ: {}\nHostmin: {}\nHostmax: {}'.format(*calculation(network, mask)))
+                bot.send_message(message.chat.id, 'Адрес сети: {}\nШироковещательный адрес: {}\nHostmin: {}\nHostmax: {}'.format(*calculation(network, mask)))
                 #bot.register_next_step_handler(message, get_data)
             else:
-                msg = bot.send_message(message.chat.id, 'Р’РІРµРґРµРЅР° РЅРµРєРѕСЂСЂРµРєС‚РЅР°СЏ РјР°СЃРєР°. РџРѕРїСЂРѕР±СѓР№С‚Рµ РµС‰Рµ СЂР°Р·')
+                msg = bot.send_message(message.chat.id, 'Введена некорректная маска. Попробуйте еще раз')
                 bot.register_next_step_handler(msg, get_data)
 
 
