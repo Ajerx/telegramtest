@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
+import os
 
-token = '373737239:AAELKerw933U1tLPUjKHC5-il1kJ78gQ49Q'
+token = os.environ["TELEGRAMTOKEN"]
